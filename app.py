@@ -1,7 +1,5 @@
 #rename file dont forget and connect to git!!!
 
-
-
 #display menu 
 def main():
     while True:
@@ -41,7 +39,6 @@ def display_menu():
 6 - Show Twinned Cities
 7 - Twin with Dublin
 x - Exit Application""")
-
 
 
 
