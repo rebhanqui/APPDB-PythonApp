@@ -2,25 +2,22 @@
 
 #display menu 
 def main():
+    countryStr = "Enter country name: "
     while True:
         display_menu()
         choice = input("Choice: ")
         
         if (choice == "x"):
             print("Quitting..")
-            break
+            
         elif (choice == 1):
-            print(1)
+            country = cities_by_country(countryStr)
+            print(country)
+            
         elif (choice == 2):
-            print(2)
-        elif (choice == 3):
-            print(3)
-        elif (choice == 4):
-            print(4)
-        elif (choice == 5):
-            print(5)
-        elif (choice == 6):
-            print(6)
+            population = update_pop()
+            print(population)
+            break
         else:
             print("Please select a choice above or x to exit the app")
         
@@ -40,7 +37,14 @@ def display_menu():
 7 - Twin with Dublin
 x - Exit Application""")
 
-
+def cities_by_country(n):
+    country = input(n)
+    return country
+    #mysql query
+    
+def update_pop():
+    population = input()
+    return population
 
 if __name__ == "__main__":
     main()
