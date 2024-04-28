@@ -1,7 +1,9 @@
+# Question 6
 def twinned_city(tx, module):
     sql = "MATCH (:City)<-[:TWINNED_WITH]->(c:City) RETURN c.name ORDER BY c.name ASC"
     results = tx.run(sql, test(module))
 
+# Question 7
 def twin_with_dublin(tx, module):
     try:
         #if does not exist create node
