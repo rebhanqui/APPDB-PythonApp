@@ -19,7 +19,11 @@ def get_countries(countryname):
     if (not conn):
         connect();
 
-    sql = "SELECT country.Name AS Country, city.Name AS City Name, city.District AS District Name, city.Population FROM country INNER JOIN city ORDER BY country.Name WHERE country = %s"
+    sql = """SELECT country.Name AS Country, city.Name AS City Name, city.District AS District Name, city.Population 
+    FROM country 
+    INNER JOIN city 
+    ORDER BY country.Name 
+    WHERE country = %s"""
 
     with conn:
         cursor = conn.cursor()
@@ -32,7 +36,12 @@ def update_pop():
     if (not conn):
             connect();
     
-    sql = "SELECT city.ID, city.Name, city.CountryCode, city.Population, city.latitude, city.longitude FROM city; UPDATE city SET population = %s WHERE population = %s;"
+    sql = """SELECT city.ID, city.Name, city.CountryCode, city.Population, city.latitude, city.longitude 
+    FROM city; 
+    
+    UPDATE city 
+    SET population = %s 
+    WHERE population = %s;"""
         
     with conn:
         cursor = conn.cursor()    
@@ -55,9 +64,12 @@ def delete_per():
             connect();
     
     #has visited do not delete
-    sql = "SELECT * FROM hasvisitedcity WHERE personid = %s"
+    sql = """SELECT * 
+    FROM hasvisitedcity 
+    WHERE personid = %s"""
             
-    sql = "DELETE FROM person WHERE person.personID = %s;"
+    sql = """DELETE FROM person 
+    WHERE person.personID = %s;"""
 
 # Question 5            
 def country_by_pop():
