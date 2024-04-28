@@ -46,7 +46,7 @@ def add_new():
             connect();
     
     sql = "INSERT INTO person VALUES (%s, %s, %s, %s, %s);"
-        cursor.execute(sql)
+    cursor.execute(sql)
         
 # Question 4
 def delete_per():
@@ -55,9 +55,9 @@ def delete_per():
             connect();
     
     #has visited do not delete
-        sql = "SELECT * FROM hasvisitedcity WHERE personid = %s"
+    sql = "SELECT * FROM hasvisitedcity WHERE personid = %s"
             
-            sql = "DELETE FROM person WHERE person.personID = %s;"
+    sql = "DELETE FROM person WHERE person.personID = %s;"
 
 # Question 5            
 def country_by_pop():
