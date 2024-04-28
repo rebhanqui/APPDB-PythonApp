@@ -2,6 +2,7 @@
 
 #modules1
 import sqlqueries
+import neo4jqueries
 
 #display menu 
 def display_menu():
@@ -36,19 +37,21 @@ def main():
             try:
                 city_choice = input("Enter City ID: ")
                 sqlqueries.update_pop(int(city_choice))
-                display_menu
+                display_menu()
             except:
                 if city_choice != sqlqueries.update_pop()
         elif (choice == 3):
-            print("elif 3")
+            sqlqueries.add_new()
+            display_menu()
         elif (choice == 4):
-            print("elif 4")
+            sqlqueries.delete_per()
         elif (choice == 5):
-            print("elif 5")
+            sqlqueries.country_by_pop()
         elif (choice == 6):
-            print("elif 6")
+            neo4jqueries.twinned_city()
         elif (choice == 7):
-            print("elif 2")
+            twdublin = input("Enter city ID: ")
+            neo4jqueries.twin_with_dublin(twdublin)
         else:
             print("Please select a choice above or x to exit the app")
         

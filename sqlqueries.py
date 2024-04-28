@@ -28,6 +28,29 @@ def update_pop():
     if (not conn):
             connect();
     
-        sql = "SELECT city.ID, city.Name, city.CountryCode, city.Population, city.latitude, city.longitude FROM city; UPDATE city SET population = ? WHERE population = ?;"
+        sql = "SELECT city.ID, city.Name, city.CountryCode, city.Population, city.latitude, city.longitude FROM city; UPDATE city SET population = %s WHERE population = %s;"
         
         cursor.execute(sql, (city_choice))
+        
+def add_new():
+    if (not conn):
+            connect();
+    
+        sql = "INSERT INTO person VALUES (%s, %s, %s, %s, %s);"
+        cursor.execute(sql)
+
+def delete_per():
+    
+    if (not conn):
+            connect();
+    
+    #has visited do not delete
+        sql = "SELECT * FROM hasvisitedcity WHERE personid = %s"
+            
+            sql = "DELETE FROM person WHERE person.personID = %s;"
+            
+def country_by_pop():
+    if (not conn):
+            connect();
+    
+    sql = "SELECT country.Code, country.Name, country.Continent, country.Population FROM country ORDER BY country.Code"
