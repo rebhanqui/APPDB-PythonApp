@@ -160,17 +160,42 @@ def addPerson():
         
 # Question 4
 def viewCountriesByPopulation():
+    if not conn:
+        connect()
     
-    if (not conn):
-            connect();
-    
-    #has visited do not delete
-    sql = """SELECT * 
-    FROM hasvisitedcity 
-    WHERE personid = %s"""
+    try:
+        with conn.cursor as cursor:
+            personID = input("Enter the ID of the person to delete: ")
+
+            # Check if the person exists
+            personExists = "SELECT * FROM person WHERE personID = %s"
+            cursor.execute(personExists, (personID,))
+            person = cursor.fetchone()
             
-    sql = """DELETE FROM person 
-    WHERE person.personID = %s;"""
+            if not person:
+                print("No person exists with this ID")
+                return
+
+            #has person visited cities check and no deletion
+            visitedCities = "SELECT * FROM hasvisitedcity WHERE personID = %s"
+            cursor.execute(visitedCities, (personID,))
+            visitedCities = cursor.fetchall()
+            
+            if visitedCities:
+                print("This person has visited cities and cannot be removed")
+                
+            #if person has not visited cities then delete them from database
+            deletePerson = "DELETE FROM person WHERE personID = %s"
+            cursor.execute(deletePerson, (personID,))
+            conn.commit()
+            print("Person deleted")
+        
+    except pymysql.Error as Error:
+        print("MySQL Error:", Error)
+        return None
+    finally:
+        conn.close 
+    
 
 # Question 5            
 def getTwinnedCities():
