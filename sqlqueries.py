@@ -10,7 +10,7 @@ def connect():
             host="localhost", 
             user="root", 
             password="root", 
-            db="appDBproj_MySql.sql", 
+            db="appDBproj", 
             cursorclass=pymysql.cursors.DictCursor
             )
 
