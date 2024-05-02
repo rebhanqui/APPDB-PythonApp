@@ -1,27 +1,78 @@
 from neo4j import GraphDatabase
 
-uri = "neo4j://localhost:7687"
-auth = ("neo4j", "neo4jneo4j")
+# Connect to Neo4j database
+driver = None
 
-with GraphDatabase.driver(uri, auth=auth) as driver:
-    driver.verify_connectivity()
+def connect():
+    global driver
+    uri = "neo4j://localhost:7687"
+    driver = GraphDatabase.driver(uri, auth=("neo4j", "neo4jneo4j"))
 
 # Question 6
+def runCities(tx):
+    query = (
+        "MATCH (c:City)-[:TWINNED_WITH]->(d:City) "
+        "RETURN c.name AS CityName, d.name AS TwinnedWith "
+        "ORDER BY c.name"
+    )
+    results = tx.run(query)
+    return [(record["CityName"], record["TwinnedWith"]) for record in results]
+
 def getTwinnedCities():
-    sql = """MATCH (:City)<-[:TWINNED_WITH]->(c:City) 
-    RETURN c.name 
-    ORDER BY c.name ASC"""
-    results = tx.run(sql, test(module))
+    connect()
+    with driver.session() as session:
+        values = session.read_transaction(runCities)
+        if not values:
+            print("No twinned cities found.")
+        else:
+            print("Twinned Cities:")
+            for city, twinnedWith in values:
+                print(f"{city} twinned with {twinnedWith}")
+
+###
+
+def cityExists(cityID):
+    with driver.session() as session:
+        result = session.run(
+            "MATCH (c:City {cid: $cityID}) RETURN count(c) AS count",
+            cityID=cityID
+        )
+        record = result.single()
+        return record["count"] > 0
+
+def createCity(cityID, cityName):
+    with driver.session() as session:
+        session.run(
+            "CREATE (c:City {cid: $cityID, name: $cityName}) "
+            "WITH c "
+            "MATCH (d:City {name: 'Dublin'}) "
+            "CREATE (c)-[:TWINNED_WITH]->(d)",
+            cityID=cityID,
+            cityName=cityName
+        )
 
 # Question 7
-def twinnedWithDublin():
-    try:
-        #if does not exist create node
-        sql = ""
-    except:
-        #if yhe city ID exists then the TWINNED relation is created
-        sql = ""
-    finally:
-        #If city id entered is already twinned with dublin (130-Sydney) then nothing is done.
-        sql = """MATCH (:City {cid: 1447})-[:TWINNED_WITH]->(c:City) 
-        RETURN c.cid, c.name"""
+def twinnedwithDublin():
+    connect()
+    cityID = input("Enter the ID of the city: ")
+
+    if not cityExists(cityID):
+        # If the city ID does not exist, prompt the user to enter the city name
+        cityName = input("Enter the name of the city: ")
+        # Create the city in the database
+        createCity(cityID, cityName)
+        print(f"City with ID {cityID} and name {cityName} created.")
+    else:
+        if not cityExists(cityID):
+            # If the city exists but is not twinned with Dublin, create the twinning relationship
+            with driver.session() as session:
+                session.run(
+                    "MATCH (c:City {cid: $cityID}), (d:City {name: "Dublin"}) "
+                    "MERGE (c)-[:TWINNED_WITH]->(d)",
+                    cityID=cityID
+                )
+            print(f"City with ID {cityID} twinned with Dublin.")
+        else:
+            # If the city is already twinned with Dublin, inform the user
+            print(f"City with ID {cityID} is already twinned with Dublin.")
+

@@ -1,7 +1,5 @@
 #rename file dont forget
 
-
-
 #display menu 
 def display_menu():
     print("""

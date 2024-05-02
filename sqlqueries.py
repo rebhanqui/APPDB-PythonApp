@@ -164,7 +164,7 @@ def deletePerson():
         connect()
     
     try:
-        with conn.cursor as cursor:
+        with conn.cursor() as cursor:
             personID = input("Enter the ID of the person to delete: ")
 
             # Check if the person exists
@@ -199,8 +199,54 @@ def deletePerson():
 
 # Question 5            
 def viewCountriesByPopulation():
-    connect()
+    if not conn:
+        connect()
     
-    sql = "SELECT country.Code, country.Name, country.Continent, country.Population FROM country ORDER BY country.Code"
-    
+    try:
+        with conn.cursor() as cursor:
+            operators = ['<', '>', '=']
+            while True:
+                #input operator to base the population on - greater than, less than, equal to
+                operator = input("Enter the operator (<, >, or =): ")
+                if operator not in operators:
+                    print("Invalid operator. Please try again.")
+                    continue
+                #population input to look for with operator selected
+                population = input("Enter the population number: ")
+                try:
+                    population = int(population)
+                    if population < 0:
+                        print("Population number must be non-negative. Please try again.")
+                        continue
+                except ValueError:
+                    print("Invalid population number. Please try again.")
+                    continue
+
+                #countries selected based on operator input and population
+                query = f"SELECT Code, Name, Continent, Population FROM country WHERE Population {operator} %s"
+                cursor.execute(query, (population,))
+                countries = cursor.fetchall()
+
+                #results printed based on above if no error found
+                if countries:
+                    for country in countries:
+                        print(f"Code: {country['Code']}")
+                        print(f"Name: {country['Name']}")
+                        print(f"Continent: {country['Continent']}")
+                        print(f"Population: {country['Population']}")
+                        print()
+                else:
+                    print("No countries match the population condition.")
+
+                break #exit while loop after results
+            
+    except pymysql.Error as Error:
+        print("MySQL Error:", Error)
+        return None
+    finally:
+        conn.close 
+
+
+if conn:
+    conn.close()  #close database if exiting the application       
 # Question 6 and 7 work with Neo4j databases and are located in the neo4jqueries.py file
