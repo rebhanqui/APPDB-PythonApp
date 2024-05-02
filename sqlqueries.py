@@ -116,9 +116,41 @@ def addPerson():
 
     try:
         with conn.cursor() as cursor:
+            personID = input("Enter person ID: ")
+            name = input("Enter name: ")
+            age = input("Enter age: ")
+            salary = input("Enter salary: ")
+            cityID = input("Enter cityID: ")
+        
+        #Check if personid exists
+            query = "SELECT * FROM person WHERE personID = %s"
+            cursor.execute(query, (personID,))
+            personExists = cursor.fetchone()
             
-    
-    
+            if personExists:
+                print("This person already exists in the database")
+                return
+            
+        #Check city ID exists
+            query = "SELECT * FROM city WHERE ID = %s"
+            cursor.execute(query, (cityID,))
+            cityExists = cursor.fetchone()
+            if not cityExists:
+                print("City ID does not exist in the database")
+                return
+        
+        #if all information is valid then add to database
+            query = "INSERT INTO person (personID, personname, age, salary, city) VALUES (%s, %s, %s, %s, %s)"
+            cursor.execute(query, (personID, name, age, salary, cityID))
+            #commits to db
+            conn.commit()
+            print(f"""The following person was added:\n
+                ID: {personID}\n
+                Name: {name}\n
+                Age: {age}\n
+                Salary: {salary}\n
+                City ID: {cityID}\n""")
+
     except pymysql.Error as Error:
         print("MySQL Error:", Error)
         return None
