@@ -159,7 +159,7 @@ def addPerson():
 
         
 # Question 4
-def viewCountriesByPopulation():
+def deletePerson():
     if not conn:
         connect()
     
@@ -198,7 +198,7 @@ def viewCountriesByPopulation():
     
 
 # Question 5            
-def getTwinnedCities():
+def viewCountriesByPopulation():
     connect()
     
     sql = "SELECT country.Code, country.Name, country.Continent, country.Population FROM country ORDER BY country.Code"

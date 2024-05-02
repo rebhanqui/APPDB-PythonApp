@@ -13,7 +13,7 @@ def display_menu():
 2 - Update City Population
 3 - Add New Person
 4 - Delete Person
-5 - View Countries by population
+5 - View Countries by Population
 6 - Show Twinned Cities
 7 - Twin with Dublin
 x - Exit Application""")
@@ -31,9 +31,9 @@ def main():
         elif choice == "3":
             sqlqueries.addPerson()
         elif choice == "4":
-            sqlqueries.viewCountriesByPopulation()
+            sqlqueries.deletePerson()
         elif choice == "5":
-            sqlqueries.getTwinnedCities()
+            sqlqueries.viewCountriesByPopulation()
         elif choice == "6":
             neo4jqueries.getTwinnedCities()
         elif choice == "7":
