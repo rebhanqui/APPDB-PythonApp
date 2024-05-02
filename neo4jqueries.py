@@ -7,14 +7,14 @@ with GraphDatabase.driver(uri, auth=auth) as driver:
     driver.verify_connectivity()
 
 # Question 6
-def twinned_city(tx, module):
+def getTwinnedCities():
     sql = """MATCH (:City)<-[:TWINNED_WITH]->(c:City) 
     RETURN c.name 
     ORDER BY c.name ASC"""
     results = tx.run(sql, test(module))
 
 # Question 7
-def twin_with_dublin(tx, module):
+def twinnedWithDublin():
     try:
         #if does not exist create node
         sql = ""

@@ -15,7 +15,7 @@ def connect():
             )
 
 # Question 1
-def get_countries(countryname):
+def viewCitiesByCountry():
     if (not conn):
         connect();
 
@@ -32,7 +32,7 @@ def get_countries(countryname):
         print(result)
 
 # Question 2           
-def update_pop():
+def updateCityPopulation():
     if (not conn):
             connect();
     
@@ -50,7 +50,7 @@ def update_pop():
         print(result)
 
 # Question 3         
-def add_new():
+def addPerson():
     if (not conn):
             connect();
     
@@ -58,7 +58,7 @@ def add_new():
     cursor.execute(sql)
         
 # Question 4
-def delete_per():
+def viewCountriesByPopulation():
     
     if (not conn):
             connect();
@@ -72,7 +72,7 @@ def delete_per():
     WHERE person.personID = %s;"""
 
 # Question 5            
-def country_by_pop():
+def getTwinnedCities():
     if (not conn):
             connect();
     
