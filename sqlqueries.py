@@ -22,7 +22,8 @@ def connect():
 
 # Question 1
 def viewCitiesByCountry():
-    connect()
+    if not conn:
+        connect()
 
     try:
         with conn.cursor() as cursor:
@@ -61,25 +62,69 @@ def updateCityPopulation():
     if not conn:
         connect()
     
-    sql = """SELECT city.ID, city.Name, city.CountryCode, city.Population, city.latitude, city.longitude 
-    FROM city; 
+    try:
+        while True:
+            #first inpur query for city ID 
+            cityID = input("Enter the ID of the city: ")
+            with conn.cursor() as cursor:
+                query = "SELECT * FROM city WHERE ID = %s"
+                cursor.execute(query, (cityID,))
+                city = cursor.fetchone()
+                #city information is then printed if the city id exists
+                if city:
+                    print("City details:")
+                    print(f"ID: {city['ID']}")
+                    print(f"Name: {city['Name']}")
+                    print(f"CountryCode: {city['CountryCode']}")
+                    print(f"Population: {city['Population']}")
+                    print(f"Latitude: {city['latitude']}")
+                    print(f"Longitude: {city['longitude']}")
+
+                    #if exists then user is asked if they want to increase or decrease pop no, input is made lowercase.
+                    change = input("Do you want to increase or decrease the population? (Enter 'I' for increase, 'D' for decrease): ").lower()
+                    if change == 'i':
+                        updatePopulation = int(input("Enter the amount to increase the population: "))
+                    elif change == 'd':
+                        updatePopulation = -int(input("Enter the amount to decrease the population: "))
+                    else:
+                        #if input invalid user notified and returned to mainmenu
+                        print("Invalid choice.")
+                        return
+
+                    #if all input is valid then sql query updates pop and notifys user
+                    query = "UPDATE city SET Population = Population + %s WHERE ID = %s"
+                    cursor.execute(query, (updatePopulation, cityID))
+                    conn.commit()
+                    print("Population updated successfully.")
+                    #asks if user wishes to continue or return to main menu
+                    choice = input("Do you want to continue updating population or return to the main menu? (Enter 'C' to continue, 'M' for main menu): ").lower
+                    if choice == "m":
+                        break
+                else:
+                    print("Invalid city ID. Please try again.")
     
-    UPDATE city 
-    SET population = %s 
-    WHERE population = %s;"""
-        
-    with conn:
-        cursor = conn.cursor()    
-        cursor.execute(sql, city_choice("%s"))
-        result = cursor.fetchall()
-        print(result)
+    except pymysql.Error as Error:
+        print("MySQL Error:", Error)
+        return None
+    finally:
+        conn.close
 
 # Question 3         
 def addPerson():
-    connect()
+    if not conn:
+        connect()
+
+    try:
+        with conn.cursor() as cursor:
+            
     
-    sql = "INSERT INTO person VALUES (%s, %s, %s, %s, %s);"
-    cursor.execute(sql)
+    
+    except pymysql.Error as Error:
+        print("MySQL Error:", Error)
+        return None
+    finally:
+        conn.close   
+
         
 # Question 4
 def viewCountriesByPopulation():
