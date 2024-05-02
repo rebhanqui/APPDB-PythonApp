@@ -1,18 +1,22 @@
+#modules to import
 import pymysql
-import pymysql.cursors
-
 
 conn = None
 
 def connect():
-        global conn 
+    global conn 
+    try:
         conn = pymysql.connect(
             host="localhost", 
             user="root", 
             password="root", 
             db="appDBproj", 
             cursorclass=pymysql.cursors.DictCursor
-            )
+        )
+        return conn
+    except pymysql.Error as Error:
+        print("Error connecting to the database:", Error)
+        return None
 
 # Question 1
 def viewCitiesByCountry():
