@@ -43,36 +43,37 @@ def cityExists(cityID):
 def createCity(cityID, cityName):
     with driver.session() as session:
         session.run(
-            "CREATE (c:City {cid: $cityID, name: $cityName}) "
+            "CREATE (c:City {cid: $cityID, name: $cityName})"
             "WITH c "
-            "MATCH (d:City {name: 'Dublin'}) "
+            "MATCH (d:City {name: 'Dublin'})"
             "CREATE (c)-[:TWINNED_WITH]->(d)",
             cityID=cityID,
             cityName=cityName
         )
 
 # Question 7
-def twinnedwithDublin():
+def twinnedWithDublin():
     connect()
     cityID = input("Enter the ID of the city: ")
 
     if not cityExists(cityID):
-        # If the city ID does not exist, prompt the user to enter the city name
+        #ff the city ID does not exist, prompt the user to enter the city name to add twinned city with Dublin
         cityName = input("Enter the name of the city: ")
-        # Create the city in the database
+        #create the city in the database
         createCity(cityID, cityName)
         print(f"City with ID {cityID} and name {cityName} created.")
     else:
         if not cityExists(cityID):
-            # If the city exists but is not twinned with Dublin, create the twinning relationship
+            #if the city exists but is not twinned with Dublin, create the twinned relationship
             with driver.session() as session:
                 session.run(
-                    "MATCH (c:City {cid: $cityID}), (d:City {name: "Dublin"}) "
+                    "MATCH (c:City {cid: $cityID}), (d:City{name: 'Dublin'}) "
                     "MERGE (c)-[:TWINNED_WITH]->(d)",
                     cityID=cityID
                 )
+
             print(f"City with ID {cityID} twinned with Dublin.")
         else:
-            # If the city is already twinned with Dublin, inform the user
+            #if the city is already twinned with Dublin, inform the user
             print(f"City with ID {cityID} is already twinned with Dublin.")
 

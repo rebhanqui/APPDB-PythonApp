@@ -15,7 +15,7 @@ def connect():
         )
         return conn
     #returns error and detail if connection fails
-    #https://stackoverflow.com/questions/41344171/handling-pymysql-exceptions-best-practices
+    
     except pymysql.Error as Error:
         print("Error connecting to the database:", Error)
         return None
@@ -25,37 +25,36 @@ def viewCitiesByCountry():
     if not conn:
         connect()
 
-    try:
-        with conn.cursor() as cursor:
-            countryName = input("Enter the name of a country: ")
-            query = """SELECT country.Name, city.Name, city.District, city.Population, city.latitude, city.longitude 
-                    FROM country 
-                    JOIN city ON country.Code = city.CountryCode 
-                    WHERE country.Name LIKE %s"""
-            cursor.execute(query, (countryName,))
-            cities = cursor.fetchall()
+        try:
+            with conn.cursor() as cursor:
+                countryName = input("Enter the name of a country: ")
+                query = """SELECT country.Name, city.Name, city.District, city.Population, city.latitude, city.longitude 
+                        FROM country 
+                        JOIN city ON country.Code = city.CountryCode 
+                        WHERE country.Name LIKE %s"""
+                cursor.execute(query, (countryName,))
+                cities = cursor.fetchall()
 
-#if cities are found in database under country name then code iterates through results of sql query
-#results then display unless none found and else prints this            
-            if cities:
-                chosenCountry = None
-                for city in cities:
-                    if chosenCountry != city['Name']:
-                        chosenCountry = city['Name']
-                        print(f"Country: {chosenCountry}")
-                    print(f"City: {city['Name']}")
-                    print(f"District: {city['District']}")
-                    print(f"Population: {city['Population']}")
-                    print()
-            else:
-                print(f"No cities found for {countryName}")
-#https://realpython.com/python-f-strings/
-    except pymysql.Error as Error:
-        print("MySQL Error:", Error)
-        return None
-    finally:
-        conn.close
-#https://www.geeksforgeeks.org/try-except-else-and-finally-in-python/
+    #if cities are found in database under country name then code iterates through results of sql query
+    #results then display unless none found and else prints this            
+                if cities:
+                    chosenCountry = None
+                    for city in cities:
+                        if chosenCountry != city['Name']:
+                            chosenCountry = city['Name']
+                            print(f"Country: {chosenCountry}")
+                        print(f"City: {city['Name']}")
+                        print(f"District: {city['District']}")
+                        print(f"Population: {city['Population']}")
+                        print()
+                else:
+                    print(f"No cities found for {countryName}")
+        except pymysql.Error as Error:
+            print("MySQL Error:", Error)
+            return None
+        finally:
+            conn.close
+
 
 # Question 2           
 def updateCityPopulation():
@@ -96,10 +95,7 @@ def updateCityPopulation():
                     cursor.execute(query, (updatePopulation, cityID))
                     conn.commit()
                     print("Population updated successfully.")
-                    #asks if user wishes to continue or return to main menu
-                    choice = input("Do you want to continue updating population or return to the main menu? (Enter 'C' to continue, 'M' for main menu): ").lower
-                    if choice == "m":
-                        break
+                    break
                 else:
                     print("Invalid city ID. Please try again.")
     
@@ -108,6 +104,7 @@ def updateCityPopulation():
         return None
     finally:
         conn.close
+
 
 # Question 3         
 def addPerson():
