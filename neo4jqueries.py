@@ -8,7 +8,7 @@ def connect():
     uri = "neo4j://localhost:7687"
     driver = GraphDatabase.driver(uri, auth=("neo4j", "neo4jneo4j"))
 
-# Question 6
+#Question 6
 def runCities(tx):
     query = (
         "MATCH (c:City)-[:TWINNED_WITH]->(d:City) "
@@ -64,13 +64,13 @@ def twinnedWithDublin():
         )
         record = result.single()
         if record["count"] == 0:
-            # City does not exist, prompt user to enter the name of the city
+            #city does not exist, prompt user to enter the name of the city
             cityName = input("Enter the name of the city: ")
-            # Create the city in the database
+            #create the city in the database
             createCity(cityID, cityName)
             print(f"City with ID {cityID} and name {cityName} created and twinned with Dublin.")
         else:
-            # City exists, check if twinned with Dublin
+            #city exists, check if twinned with Dublin
             result = session.run(
                 "MATCH (c:City {cid: $cityID})-[:TWINNED_WITH]->(:City {name: 'Dublin'}) "
                 "RETURN count(c) AS count",
@@ -78,7 +78,7 @@ def twinnedWithDublin():
             )
             record = result.single()
             if record["count"] == 0:
-                # City is not twinned with Dublin, create the twinned relationship
+                #city is not twinned with Dublin, create the twinned relationship
                 session.run(
                     "MATCH (c:City {cid: $cityID}), (d:City{name: 'Dublin'}) "
                     "MERGE (c)-[:TWINNED_WITH]->(d)",
@@ -86,6 +86,6 @@ def twinnedWithDublin():
                 )
                 print(f"City with ID {cityID} twinned with Dublin.")
             else:
-                # City is already twinned with Dublin
+                #city is already twinned with Dublin
                 print(f"City with ID {cityID} is already twinned with Dublin.")
 
