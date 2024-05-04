@@ -84,7 +84,7 @@ def twinnedWithDublin():
                     "MERGE (c)-[:TWINNED_WITH]->(d)",
                     cityID=cityID
                 )
-                print(f"City with ID {cityID} twinned with Dublin.")
+                print(f"City with ID {cityID} has been twinned with Dublin.")
             else:
                 #city is already twinned with Dublin
                 print(f"City with ID {cityID} is already twinned with Dublin.")
