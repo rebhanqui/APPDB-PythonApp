@@ -52,9 +52,6 @@ def viewCitiesByCountry():
         except pymysql.Error as Error:
             print("MySQL Error:", Error)
             return None
-        finally:
-            conn.close
-
 
 # Question 2           
 def updateCityPopulation():
@@ -102,9 +99,6 @@ def updateCityPopulation():
     except pymysql.Error as Error:
         print("MySQL Error:", Error)
         return None
-    finally:
-        conn.close
-
 
 # Question 3         
 def addPerson():
@@ -151,9 +145,6 @@ def addPerson():
     except pymysql.Error as Error:
         print("MySQL Error:", Error)
         return None
-    finally:
-        conn.close   
-
         
 # Question 4
 def deletePerson():
@@ -189,10 +180,7 @@ def deletePerson():
         
     except pymysql.Error as Error:
         print("MySQL Error:", Error)
-        return None
-    finally:
-        conn.close 
-    
+        return None  
 
 # Question 5            
 def viewCountriesByPopulation():
@@ -240,9 +228,6 @@ def viewCountriesByPopulation():
     except pymysql.Error as Error:
         print("MySQL Error:", Error)
         return None
-    finally:
-        conn.close 
-
 
 if conn:
     conn.close()  #close database if exiting the application       

@@ -11,7 +11,7 @@ def display_menu():
 4 - Delete Person
 5 - View Countries by Population
 6 - Show Twinned Cities
-7 - Twin with Dublin
+7 - Twinned with Dublin
 x - Exit Application""")
 
 def main():
