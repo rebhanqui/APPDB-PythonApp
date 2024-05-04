@@ -124,7 +124,7 @@ def addPerson():
                 print("This person already exists in the database")
                 return
             
-        #Check city ID exists
+            #check city ID exists
             query = "SELECT * FROM city WHERE ID = %s"
             cursor.execute(query, (cityID,))
             cityExists = cursor.fetchone()
@@ -132,7 +132,7 @@ def addPerson():
                 print("City ID does not exist in the database")
                 return
         
-        #if all information is valid then add to database
+            #if all information is valid then add to database
             query = "INSERT INTO person (personID, personname, age, salary, city) VALUES (%s, %s, %s, %s, %s)"
             cursor.execute(query, (personID, name, age, salary, cityID))
             #commits to db
