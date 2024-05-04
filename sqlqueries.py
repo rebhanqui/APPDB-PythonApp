@@ -60,7 +60,7 @@ def updateCityPopulation():
     
     try:
         while True:
-            #first inpur query for city ID 
+            #first input query for city ID 
             cityID = input("Enter the ID of the city: ")
             with conn.cursor() as cursor:
                 query = "SELECT * FROM city WHERE ID = %s"
@@ -76,23 +76,25 @@ def updateCityPopulation():
                     print(f"Latitude: {city['latitude']}")
                     print(f"Longitude: {city['longitude']}")
 
-                    #if exists then user is asked if they want to increase or decrease pop no, input is made lowercase.
-                    change = input("Do you want to increase or decrease the population? (Enter 'I' for increase, 'D' for decrease): ").lower()
-                    if change == 'i':
-                        updatePopulation = int(input("Enter the amount to increase the population: "))
-                    elif change == 'd':
-                        updatePopulation = -int(input("Enter the amount to decrease the population: "))
-                    else:
-                        #if input invalid user notified and returned to mainmenu
-                        print("Invalid choice.")
-                        return
-
+                    while True:
+                        #if exists then user is asked if they want to increase or decrease pop no, input is made lowercase.
+                        change = input("Do you want to increase or decrease the population? (Enter 'I' for increase, 'D' for decrease): ").lower()
+                        if change == 'i':
+                            updatePopulation = int(input("Enter the amount to increase the population: "))
+                            break
+                        elif change == 'd':
+                            updatePopulation = -int(input("Enter the amount to decrease the population: "))
+                            break
+                        else:
+                            #if input invalid user notified and returned to mainmenu
+                            print("Invalid choice.")
+                            
                     #if all input is valid then sql query updates pop and notifys user
                     query = "UPDATE city SET Population = Population + %s WHERE ID = %s"
                     cursor.execute(query, (updatePopulation, cityID))
                     conn.commit()
                     print("Population updated successfully.")
-                    break
+                    return
                 else:
                     print("Invalid city ID. Please try again.")
     
